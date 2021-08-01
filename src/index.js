@@ -1,11 +1,11 @@
-require('dotenv').config();
 const discordClient = require('./lib/client');
 const discordListeners = require('./lib/listeners');
+const { loginToDiscord } = require('./lib/auth');
 
 const main = () => {
   discordClient.on('ready', discordListeners.onReadyHandler);
   discordClient.on('message', discordListeners.onMessageHandler);
-  discordClient.login(process.env.DISCORD_BOT_TOKEN);
+  loginToDiscord(discordClient);
 };
 
 main();
