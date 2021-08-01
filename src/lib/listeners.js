@@ -1,5 +1,5 @@
 const config = require('../config');
-const handleCommands = require('./commands');
+const discordClient = require('./client');
 
 const onReadyHandler = () => {
   console.log('Discord bot ready');
@@ -7,7 +7,9 @@ const onReadyHandler = () => {
 
 const onMessageHandler = (message) => {
   if (!message.content.startsWith(config.prefix) || message.author.bot) return;
-  handleCommands(message);
+  if (!discordClient.commands.has(message.content)) return;
+
+  discordClient.commands.get(message.content).execute(message);
 };
 
 module.exports = {
