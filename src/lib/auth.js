@@ -1,4 +1,5 @@
 const config = require('../config');
+
 const loginToDiscord = (discordClient) => {
   try {
     discordClient.login(config.botToken);
