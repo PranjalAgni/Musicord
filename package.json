@@ -1,0 +1,19 @@
+{
+  "name": "musicord",
+  "version": "1.0.0",
+  "description": "A musical discord bot",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "discord",
+    "nodejs"
+  ],
+  "author": "Pranjal Agnihotri",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "dotenv": "^10.0.0"
+  }
+}
