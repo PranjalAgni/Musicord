@@ -1,7 +1,5 @@
 const handler = (message) => {
-  if (message.content === '!hi') {
-    message.channel.send('Hello there 👋');
-  }
+  message.channel.send('Hello there 👋');
 };
 
 module.exports = {
