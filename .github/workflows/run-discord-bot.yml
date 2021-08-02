@@ -1,10 +1,11 @@
 name: 'Run Musicord'
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/30 * * * *'
 jobs:
-  check_crypto_prices:
+  run_musical_bot:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
       GH_OAUTH_TOKEN: ${{ secrets.GH_OAUTH_TOKEN }}
