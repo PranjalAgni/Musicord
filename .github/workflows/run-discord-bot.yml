@@ -1,0 +1,24 @@
+name: 'Run Musicord'
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+jobs:
+  check_crypto_prices:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+      GH_OAUTH_TOKEN: ${{ secrets.GH_OAUTH_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+
+      - name: Installing dependencies
+        run: npm install
+
+      - name: Run script
+        run: npm run start
