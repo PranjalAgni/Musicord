@@ -1,26 +1,27 @@
-const got = require('got');
+const gotClient = require('../utils/got');
 
 const getLatestUpdatedRepo = async (username) => {
   let latestRepo = {
     userExist: false,
     hasRepos: false,
-    repoName: null,
+    repoNames: null,
   };
   try {
     const BASE_URL = `https://api.github.com/users/${username}/repos`;
     const searchParams = new URLSearchParams([
       ['sort', 'updated'],
-      ['per_page', 1],
+      ['per_page', 20],
     ]);
-    const { body } = await got(BASE_URL, {
+    const { body } = await gotClient(BASE_URL, {
       searchParams,
       responseType: 'json',
     });
 
+    const repoNames = body.map((repo) => repo.name);
     latestRepo = {
       userExist: true,
       hasRepos: !!body.length,
-      repoName: body.length ? body[0].name : null,
+      repoNames,
     };
   } catch (ex) {
     const errorBody = ex.response.body;
@@ -30,24 +31,31 @@ const getLatestUpdatedRepo = async (username) => {
   return latestRepo;
 };
 
-const getLatestUserCommit = async (username, reponame) => {
+const getLatestUserCommit = async (username, repoNameList) => {
   let latestCommitData = {
     date: null,
     message: null,
   };
   try {
-    const searchParams = new URLSearchParams([['author', username]]);
-    const BASE_API_URL = `https://api.github.com/repos/${username}/${reponame}/commits`;
-    const { body } = await got(BASE_API_URL, {
-      searchParams,
-      responseType: 'json',
-    });
+    for (let idx = 0; idx < repoNameList.length; idx += 1) {
+      const reponame = repoNameList[idx];
+      const searchParams = new URLSearchParams([['author', username]]);
+      const BASE_API_URL = `https://api.github.com/repos/${username}/${reponame}/commits`;
+      // eslint-disable-next-line no-await-in-loop
+      const { body } = await gotClient(BASE_API_URL, {
+        searchParams,
+        responseType: 'json',
+      });
 
-    const { commit: commitData } = body[0];
-    latestCommitData = {
-      date: commitData.committer.date,
-      message: commitData.message,
-    };
+      if (body.length) {
+        const { commit: commitData } = body[0];
+        latestCommitData = {
+          date: commitData.committer.date,
+          message: commitData.message,
+        };
+        break;
+      }
+    }
   } catch (ex) {
     const errorBody = ex.response.body;
     console.error('Error occured: ', errorBody);
@@ -75,7 +83,7 @@ const handler = async (message, args) => {
 
   const latestCommitData = await getLatestUserCommit(
     githubUsername,
-    latestRepo.repoName
+    latestRepo.repoNames
   );
   return message.channel.send(
     `Hi ${githubUsername} your last commit message was: ${latestCommitData.message} 💚`
