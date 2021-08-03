@@ -1,3 +1,5 @@
+const countdown = require('countdown');
+const { MessageEmbed } = require('discord.js');
 const gotClient = require('../utils/got');
 
 const getLatestUpdatedRepo = async (username) => {
@@ -85,9 +87,21 @@ const handler = async (message, args) => {
     githubUsername,
     latestRepo.repoNames
   );
-  return message.channel.send(
-    `Hi ${githubUsername} your last commit message was: ${latestCommitData.message} 💚`
-  );
+
+  if (!latestCommitData.date) {
+    return message.channel.send(
+      `Hi ${githubUsername} you haven't been done any commits recently 💚`
+    );
+  }
+  const timeElapsed = countdown(new Date(latestCommitData.date)).toString();
+
+  const embed = new MessageEmbed()
+    .setTitle(`Hi ${githubUsername}`)
+    .setColor(0xff0000)
+    .setDescription(
+      `Last commit message: ${latestCommitData.message}\n Committed time ago: ${timeElapsed}`
+    );
+  return message.channel.send(embed);
 };
 
 // Todo:
