@@ -10,7 +10,8 @@
 
 ## How all it works?
 
-I am using [discord.js](https://discord.js.org/#/) to talk to Discord API. Currently I am using a hack to run it on Github action as a CI/CD job which gets triggered by a cron scheduler every 30 mins and to avoid parllel jobs running, I have set job timeout to 30 mins. Looks [here](https://github.com/PranjalAgni/Musicord/blob/master/.github/workflows/run-discord-bot.yml) for better understanding
+1- It uses [discord.js](https://discord.js.org/#/) to talk to Discord API.
+2- As I don't have any credits left 😆 in any cloud providers, so I am using a hack to run it on CI/CD pipeline and making it seem as its running on some VM by polluting the timeout field. Looks [here](https://github.com/PranjalAgni/Musicord/blob/master/.github/workflows/) for better understanding.
 
 ## Commands supported
 
