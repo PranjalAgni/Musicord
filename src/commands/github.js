@@ -2,6 +2,13 @@ const countdown = require('countdown');
 const { MessageEmbed } = require('discord.js');
 const gotClient = require('../utils/got');
 
+// Todo:
+// 1. [x] Github API to fetch the latest updated repo by username
+// 2. [x] Get the repo name from latest updated repo
+// 3. Github API to fetch the latest commit of that user in the above repo
+// 4. Reply with a colorful message about the commit message, last commited time
+// 5. Also replace the emoji tags withe emoji in the commit message (* extra)
+
 const getLatestUpdatedRepo = async (username) => {
   let latestRepo = {
     userExist: false,
@@ -97,19 +104,12 @@ const handler = async (message, args) => {
 
   const embed = new MessageEmbed()
     .setTitle(`Hi ${githubUsername}`)
-    .setColor(0xff0000)
+    .setColor('0099ff')
     .setDescription(
       `Last commit message: ${latestCommitData.message}\n Committed time ago: ${timeElapsed}`
     );
   return message.channel.send(embed);
 };
-
-// Todo:
-// 1. [x] Github API to fetch the latest updated repo by username
-// 2. [x] Get the repo name from latest updated repo
-// 3. Github API to fetch the latest commit of that user in the above repo
-// 4. Reply with a colorful message about the commit message, last commited time
-// 5. Also replace the emoji tags withe emoji in the commit message (* extra)
 
 module.exports = {
   name: 'github',
