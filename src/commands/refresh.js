@@ -13,6 +13,7 @@ const handler = async (message) => {
 
 module.exports = {
   name: 'refresh',
-  description: 'Removes all the songs from queue, for the guild',
+  description:
+    'Stops the current playing the song, clears the queue and removes the voice channel',
   execute: handler,
 };

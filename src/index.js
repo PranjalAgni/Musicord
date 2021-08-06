@@ -9,3 +9,6 @@ const main = async () => {
 };
 
 main();
+
+// handle any unhandled exception, if it bubble's up
+process.on('unhandledRejection', console.error);

@@ -9,7 +9,6 @@ const constructQueueObject = (textChannel, voiceChannel) => ({
   connections: null,
   songs: [],
   volume: 5,
-  playing: true,
 });
 
 const startBeats = (guildId) => {
