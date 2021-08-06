@@ -14,7 +14,7 @@ const constructQueueObject = (textChannel, voiceChannel) => ({
 const startBeats = (guildId, currentSong) => {
   const guildsMusicManager = musicalQueue.get(guildId);
   if (!currentSong) {
-    musicalQueue.voiceChannel.leave();
+    guildsMusicManager.voiceChannel.leave();
     musicalQueue.delete(guildId);
     return;
   }
