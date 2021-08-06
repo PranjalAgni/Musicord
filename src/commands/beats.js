@@ -11,7 +11,7 @@ const constructQueueObject = (textChannel, voiceChannel) => ({
   volume: 5,
 });
 
-const startBeats = (guildId, updateCurrentPlayingSong) => {
+const startBeats = (guildId) => {
   const guildsMusicManager = musicalQueue.get(guildId);
   const currentSong = guildsMusicManager.songs[0];
   if (!currentSong) {
@@ -21,12 +21,15 @@ const startBeats = (guildId, updateCurrentPlayingSong) => {
   }
 
   guildsMusicManager.currentPlaying = true;
-  updateCurrentPlayingSong(currentSong);
+  guildsMusicManager.textChannel.send(
+    `⚡ **Current Playing**: ${currentSong.title} - ${currentSong.lengthSeconds}`
+  );
+
   const dispatcher = guildsMusicManager.connection
     .play(fetchMusicStream(currentSong.url))
     .on('finish', () => {
       guildsMusicManager.songs.shift();
-      startBeats(guildId, updateCurrentPlayingSong);
+      startBeats(guildId);
     })
     .on('error', (err) => {
       guildsMusicManager.currentPlaying = false;
@@ -37,7 +40,6 @@ const startBeats = (guildId, updateCurrentPlayingSong) => {
     });
 
   dispatcher.setVolumeLogarithmic(guildsMusicManager.volume / 5);
-  guildsMusicManager.textChannel.send(`🎵 **Playing** 🎵 ${currentSong.title}`);
 };
 const handler = async (message, args) => {
   const voiceChannel = message.member.voice.channel;
@@ -81,13 +83,7 @@ const handler = async (message, args) => {
     );
   }
 
-  const updateCurrentPlayingSong = (currentSong) => {
-    message.channel.send(
-      `⚡ **Current Playing**: ${currentSong.title} - ${currentSong.lengthSeconds}`
-    );
-  };
-
-  return startBeats(message.guild.id, updateCurrentPlayingSong);
+  return startBeats(message.guild.id);
 };
 
 module.exports = {
