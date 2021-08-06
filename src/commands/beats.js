@@ -11,7 +11,7 @@ const constructQueueObject = (textChannel, voiceChannel) => ({
   volume: 5,
 });
 
-const startBeats = (guildId) => {
+const startBeats = (guildId, updateCurrentPlayingSong) => {
   const guildsMusicManager = musicalQueue.get(guildId);
   const currentSong = guildsMusicManager.songs[0];
   if (!currentSong) {
@@ -21,12 +21,12 @@ const startBeats = (guildId) => {
   }
 
   guildsMusicManager.currentPlaying = true;
-
+  updateCurrentPlayingSong(currentSong);
   const dispatcher = guildsMusicManager.connection
     .play(fetchMusicStream(currentSong.url))
     .on('finish', () => {
       guildsMusicManager.songs.shift();
-      startBeats(guildId);
+      startBeats(guildId, updateCurrentPlayingSong);
     })
     .on('error', (err) => {
       guildsMusicManager.currentPlaying = false;
@@ -81,9 +81,13 @@ const handler = async (message, args) => {
     );
   }
 
-  message.channel.send(`⚡ Added to queue: ${musicInfo.title}`);
+  const updateCurrentPlayingSong = (currentSong) => {
+    message.channel.send(
+      `⚡ **Current Playing**: ${currentSong.title} - ${currentSong.lengthSeconds}`
+    );
+  };
 
-  return startBeats(message.guild.id);
+  return startBeats(message.guild.id, updateCurrentPlayingSong);
 };
 
 module.exports = {

@@ -9,11 +9,12 @@ const fetchYTData = async (ytUrl) => {
   const musicInfo = await ytdl.getInfo(ytUrl);
   if (!musicInfo) return ytData;
 
-  const { title, video_url: url } = musicInfo.videoDetails;
+  const { title, video_url: url, lengthSeconds } = musicInfo.videoDetails;
   ytData = Object.assign(ytData, {
     found: true,
     title,
     url,
+    lengthSeconds,
   });
 
   return ytData;
