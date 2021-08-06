@@ -12,7 +12,7 @@
 
 1- It uses [discord.js](https://discord.js.org/#/) to talk to Discord API.
 
-2- As I don't have any credits left 😆 in any cloud providers, so I am using a hack to run it on CI/CD pipeline and making it seem as its running on some VM by polluting the timeout field. Looks [here](https://github.com/PranjalAgni/Musicord/blob/master/.github/workflows/) for better understanding.
+2- As I don't have any credits left 😆 in any cloud providers, so I am using a hack to run it on CI/CD pipeline and making it seem as its running on some VM by polluting the timeout field. Look [here](https://github.com/PranjalAgni/Musicord/blob/master/.github/workflows/) for better understanding.
 
 ## Commands supported
 
