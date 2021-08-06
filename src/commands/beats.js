@@ -49,7 +49,7 @@ const handler = async (message, args) => {
     return message.channel.send(`${args[0]} is not a valid url`);
   }
 
-  message.channel.send(`🌈 **Searching** 🌈: ${args[0]}`);
+  message.channel.send(`🌈 **Searching** 🌈: \`${args[0]}\``);
   const musicInfo = await fetchYTData(args[0]);
   if (!musicInfo.found) {
     return message.channel.send(`✂️ Cannot found any data for ${args[0]}`);
