@@ -3,6 +3,7 @@ const musicalQueue = require('../utils/queue');
 const { fetchYTData, fetchMusicStream } = require('../utils/youtube');
 
 const constructQueueObject = (textChannel, voiceChannel) => ({
+  currentPlaying: false,
   textChannel,
   voiceChannel,
   connections: null,
@@ -11,21 +12,28 @@ const constructQueueObject = (textChannel, voiceChannel) => ({
   playing: true,
 });
 
-const startBeats = (guildId, currentSong) => {
+const startBeats = (guildId) => {
   const guildsMusicManager = musicalQueue.get(guildId);
+  const currentSong = guildsMusicManager.songs[0];
   if (!currentSong) {
     guildsMusicManager.voiceChannel.leave();
     musicalQueue.delete(guildId);
     return;
   }
 
+  guildsMusicManager.currentPlaying = true;
+
   const dispatcher = guildsMusicManager.connection
     .play(fetchMusicStream(currentSong.url))
     .on('finish', () => {
       guildsMusicManager.songs.shift();
-      startBeats(guildId, guildsMusicManager.songs[0]);
+      startBeats(guildId);
     })
     .on('error', (err) => {
+      guildsMusicManager.currentPlaying = false;
+      guildsMusicManager.textChannel.send(
+        `Some error occured while playing song ${err.message}`
+      );
       console.trace(err);
     });
 
@@ -64,13 +72,19 @@ const handler = async (message, args) => {
   }
 
   guildsMusicManager.songs.push(musicInfo);
-
-  message.channel.send(`⚡ Added to queue: ${musicInfo.title}`);
-
   // connects to voice channel
   const connection = await voiceChannel.join();
   guildsMusicManager.connection = connection;
-  return startBeats(message.guild.id, guildsMusicManager.songs[0]);
+
+  if (guildsMusicManager.currentPlaying) {
+    return message.channel.send(
+      `💚 Added to queue: ${musicInfo.title}\n **Queue number**: ${guildsMusicManager.songs.length}`
+    );
+  }
+
+  message.channel.send(`⚡ Added to queue: ${musicInfo.title}`);
+
+  return startBeats(message.guild.id);
 };
 
 module.exports = {
