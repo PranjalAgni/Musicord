@@ -1,4 +1,5 @@
 const ytdl = require('ytdl-core');
+const { secondsToMinutes } = require('./time');
 
 const fetchYTData = async (ytUrl) => {
   let ytData = {
@@ -14,7 +15,7 @@ const fetchYTData = async (ytUrl) => {
     found: true,
     title,
     url,
-    lengthSeconds,
+    lengthMinutes: secondsToMinutes(lengthSeconds),
   });
 
   return ytData;

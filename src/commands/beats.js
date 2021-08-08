@@ -22,7 +22,7 @@ const startBeats = (guildId) => {
 
   guildsMusicManager.currentPlaying = true;
   guildsMusicManager.textChannel.send(
-    `⚡ **Current Playing**: ${currentSong.title} - ${currentSong.lengthSeconds}`
+    `⚡ **Current Playing**: ${currentSong.title} - ${currentSong.lengthMinutes}min`
   );
 
   const dispatcher = guildsMusicManager.connection
