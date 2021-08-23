@@ -1,10 +1,14 @@
 const musicalQueue = require('../utils/queue');
 
 const handler = async (message) => {
-  const guildId = message.guild.id;
-  const guildsMusicManager = musicalQueue.get(guildId);
-  if (guildsMusicManager) {
-    guildsMusicManager.connection.dispatcher.end();
+  try {
+    const guildId = message.guild.id;
+    const guildsMusicManager = musicalQueue.get(guildId);
+    if (guildsMusicManager) {
+      guildsMusicManager.connection.dispatcher.end();
+    }
+  } catch (ex) {
+    console.error('Exception occured on !skip ', ex);
   }
 
   return message.channel.send('☕ 💖 Skipped current playing song');
