@@ -5,9 +5,10 @@ const gotClient = require('../utils/got');
 // Todo:
 // 1. [x] Github API to fetch the latest updated repo by username
 // 2. [x] Get the repo name from latest updated repo
-// 3. Github API to fetch the latest commit of that user in the above repo
-// 4. Reply with a colorful message about the commit message, last commited time
-// 5. Also replace the emoji tags withe emoji in the commit message (* extra)
+// 3. [x] Github API to fetch the latest commit of that user in the above repo
+// 4. [x] Reply with a colorful message about the commit message, last commited time
+// 5. (discord is handling it automatically) Also replace the emoji tags withe emoji
+// in the commit message (* extra)
 
 const getLatestUpdatedRepo = async (username) => {
   let latestRepo = {
@@ -67,7 +68,10 @@ const getLatestUserCommit = async (username, repoNameList) => {
     }
   } catch (ex) {
     const errorBody = ex.response.body;
-    console.error('Error occured: ', errorBody);
+    console.error(
+      'Error occured while fetching user latest commits: ',
+      errorBody
+    );
   }
 
   return latestCommitData;
