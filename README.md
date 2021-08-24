@@ -18,6 +18,7 @@
 
 - !hi - Greets you
 - !github - Tells your last commited message with elapsed time
+- !beats <YT_URL> - Plays that youtube song
 
 ## Install
 
