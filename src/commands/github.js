@@ -10,7 +10,7 @@ const gotClient = require('../utils/got');
 // 5. (discord is handling it automatically) Also replace the emoji tags withe emoji
 // in the commit message (* extra)
 
-const getLatestUpdatedRepo = async (username) => {
+const getLatestUpdatedRepo = async (username, numberOfRepos) => {
   let latestRepo = {
     userExist: false,
     hasRepos: false,
@@ -20,7 +20,7 @@ const getLatestUpdatedRepo = async (username) => {
     const BASE_URL = `https://api.github.com/users/${username}/repos`;
     const searchParams = new URLSearchParams([
       ['sort', 'updated'],
-      ['per_page', 20],
+      ['per_page', numberOfRepos],
     ]);
     const { body } = await gotClient(BASE_URL, {
       searchParams,
@@ -85,7 +85,8 @@ const handler = async (message, args) => {
   }
 
   const githubUsername = args[0];
-  const latestRepo = await getLatestUpdatedRepo(githubUsername);
+  const numberOfRepos = parseInt(args[1], 10) || 1;
+  const latestRepo = await getLatestUpdatedRepo(githubUsername, numberOfRepos);
   if (!latestRepo.userExist) {
     return message.channel.send(`${githubUsername} doesn't exists`);
   }
@@ -110,7 +111,10 @@ const handler = async (message, args) => {
     .setTitle(`Hi ${githubUsername}`)
     .setColor('0099ff')
     .setDescription(
-      `Last commit message: ${latestCommitData.message}\n Committed time ago: ${timeElapsed}`
+      `Last commit message: ${
+        latestCommitData.message
+      } \n Committed time ago: ${timeElapsed} \n\n
+      ${latestRepo.repoNames.join('\n')}`
     );
   return message.channel.send(embed);
 };
