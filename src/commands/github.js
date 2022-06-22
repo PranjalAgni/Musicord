@@ -41,11 +41,9 @@ const getLatestUpdatedRepo = async (username, numberOfRepos) => {
   return latestRepo;
 };
 
-const getLatestUserCommit = async (username, repoNameList) => {
-  let latestCommitData = {
-    date: null,
-    message: null,
-  };
+const getCommitsInformation = async (username, repoNameList) => {
+  const commitsInfoList = [];
+
   try {
     for (let idx = 0; idx < repoNameList.length; idx += 1) {
       const reponame = repoNameList[idx];
@@ -59,11 +57,12 @@ const getLatestUserCommit = async (username, repoNameList) => {
 
       if (body.length) {
         const { commit: commitData } = body[0];
-        latestCommitData = {
+        const latestCommitData = {
           date: commitData.committer.date,
           message: commitData.message,
+          repoName: reponame,
         };
-        break;
+        commitsInfoList.push(latestCommitData);
       }
     }
   } catch (ex) {
@@ -74,7 +73,21 @@ const getLatestUserCommit = async (username, repoNameList) => {
     );
   }
 
-  return latestCommitData;
+  return commitsInfoList;
+};
+
+const getFormattedMessage = (commitsInfoList) => {
+  /**
+   * 1 repoName commitMessage timeCommitted
+   * 2 repoName commitMessage timeCommitted
+   */
+
+  const formattedMessageList = commitsInfoList.map((commit, idx) => {
+    const timeElapsed = countdown(new Date(commit.date)).toString();
+    return `${idx + 1}. ${commit.repoName}  ${commit.message}  ${timeElapsed}`;
+  });
+
+  return formattedMessageList.join('\n\n');
 };
 
 const handler = async (message, args) => {
@@ -95,27 +108,23 @@ const handler = async (message, args) => {
     return message.channel.send(`${githubUsername} has no repos`);
   }
 
-  const latestCommitData = await getLatestUserCommit(
+  const commitsInfoList = await getCommitsInformation(
     githubUsername,
     latestRepo.repoNames
   );
 
-  if (!latestCommitData.date) {
+  if (!commitsInfoList.length) {
     return message.channel.send(
       `Hi ${githubUsername} you haven't been done any commits recently 💚`
     );
   }
-  const timeElapsed = countdown(new Date(latestCommitData.date)).toString();
+
+  const formattedDescription = getFormattedMessage(commitsInfoList);
 
   const embed = new MessageEmbed()
     .setTitle(`Hi ${githubUsername}`)
     .setColor('0099ff')
-    .setDescription(
-      `Last commit message: ${
-        latestCommitData.message
-      } \n Committed time ago: ${timeElapsed} \n\n
-      ${latestRepo.repoNames.join('\n')}`
-    );
+    .setDescription(formattedDescription);
   return message.channel.send(embed);
 };
 
