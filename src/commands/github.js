@@ -84,7 +84,9 @@ const getFormattedMessage = (commitsInfoList) => {
 
   const formattedMessageList = commitsInfoList.map((commit, idx) => {
     const timeElapsed = countdown(new Date(commit.date)).toString();
-    return `${idx + 1}. ${commit.repoName}  ${commit.message}  ${timeElapsed}`;
+    return `${idx + 1}. ${commit.repoName} with message ${
+      commit.message
+    } time ago ${timeElapsed}`;
   });
 
   return formattedMessageList.join('\n\n');
