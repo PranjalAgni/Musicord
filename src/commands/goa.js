@@ -1,5 +1,5 @@
 const handler = (message) => {
-  message.channel.send(`Weather in Goa is 29 degrees`);
+  message.channel.send(`Fetch and show goa Weather`);
 };
 
 module.exports = {
