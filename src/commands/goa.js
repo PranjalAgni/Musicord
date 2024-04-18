@@ -4,6 +4,6 @@ const handler = (message) => {
 
 module.exports = {
   name: 'goa',
-  description: 'Some Goa tropical vibes 🏖️📀',
+  description: 'still have to work on this Some Goa tropical vibes 🏖️📀',
   execute: handler,
 };
