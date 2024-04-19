@@ -3,7 +3,8 @@ const os = require('os');
 const handler = (message) => {
   const cpuList = os.cpus();
   const defaultCpu = cpuList.at(0);
-  message.channel.send(`CPU model is: ${defaultCpu.model}`);
+  const cpuArch = os.arch();
+  message.channel.send(`CPU model is: ${defaultCpu.model} and architecture is ${cpuArch}`);
 };
 
 module.exports = {
