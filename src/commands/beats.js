@@ -1,4 +1,5 @@
-const validUrl = require('valid-url');
+// todays we were at Thalasa and emoji will explain the rest 🥳🥰🌴💚🫶🐶
+const validUrl = require('valid-url');💚
 const musicalQueue = require('../utils/queue');
 const { fetchYTData, fetchMusicStream } = require('../utils/youtube');
 
