@@ -1,5 +1,6 @@
 // todays we were at Thalasa and emoji will explain the rest 🥳🥰🌴💚🫶🐶
 // amazing sunday at Purple Martini loved the whole vibe 
+// it was a solo beach day at Calungate
 const validUrl = require('valid-url');💚
 const musicalQueue = require('../utils/queue');
 const { fetchYTData, fetchMusicStream } = require('../utils/youtube');
